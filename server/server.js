@@ -13,7 +13,7 @@ mongoose.connect(mongoUri,{
     useUnifiedTopology: true,
     useCreateIndex: true,
     useFindAndModify: false
-})
+});
 
 
 app.use(bodyParser.json());
@@ -23,4 +23,4 @@ app.use("/api/users",users);
 const port = process.env.PORT || 3001;
 app.listen(port,()=>{
     console.log(`Server running on port ${port}`)
-})
+});
