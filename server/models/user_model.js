@@ -2,53 +2,55 @@ const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const validator = require('validator');
-require('dotenv') .config();
+require('dotenv').config();
+
 
 const userSchema = mongoose.Schema({
-    email: {
-        type: String,
+    email:{
+        type:String,
         required: true,
-        unique: true,
+        unique:true,
         trim: true,
         lowercase: true,
-        validate(value) {
-            if(!validator.isEmail(value )) {
-                throw new Error('invalid email');
+        validate(value){
+            if(!validator.isEmail(value)){
+                throw new Error('Invalid email')
             }
         }
     },
-    password: {
-        type: String,
-        required: true,
-        trim: true
+    password:{
+        type:String,
+        required:true,
+        trim:true
     },
-    role: {
-        type: String,
-        enum: ['user', 'admin'],
+    role:{
+        type:String,
+        enum:['user','admin'],
         default: 'user'
     },
-    firstname: {
-        type: String,
+    firstname:{
+        type:String,
         maxLength: 100,
-        trim: true
+        trim:true
     },
-    lastname: {
-        type: String,
+    lastname:{
+        type:String,
         maxLength: 100,
-        trim: true
+        trim:true
     },
-    age: {
-        type: Number
+    age:{
+        type:Number
     },
-    date: {
+    date:{
         type: Date,
         default: Date.now
     }
-}, {
-  //  timestamps: true
+},{
+    //   timestamps:true
     //this collection is the name default instead of say User as is exporting below
-    // collection: 'player'
-});
+
+    //   collection: "player"
+})
 
 const User = mongoose.model('User', userSchema);
 module.exports = { User };
