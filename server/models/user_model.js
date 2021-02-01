@@ -3,7 +3,6 @@ const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const validator = require('validator');
-const { use } = require('../routes/api/users');
 require('dotenv').config();
 
 
@@ -68,6 +67,15 @@ userSchema.statics.emailTaken = async function(email){
     return !!user;
 };
 
+userSchema.methods.generateToken = function(){
+    let user = this;
+    const userObj = {
+        _id:user._id.toHexString(),
+        email:user.email
+    };
+    const token = jwt.sign(userObj,process.env.DB_SECRET,{ expiresIn:'1d'});
+    return token;
+};
 
 const User = mongoose.model('User', userSchema);
-module.exports = { User }
+module.exports = { User };
