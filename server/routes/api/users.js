@@ -67,7 +67,8 @@ const getUserProps = (user) => {
 };
 
 router.route('/profile')
-.get(checkLoggedIn, async(req, res)=>{
+.get(checkLoggedIn, grantAccess('action', 'resource'), async(req, res)=>{
+
     res.status(200).send('ok profile');
 });
 
