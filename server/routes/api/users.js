@@ -1,6 +1,7 @@
 const express  = require('express');
 let router = express.Router();
 require('dotenv').config();
+const { checkLoggedIn } = require('../../middleware/auth');
 
 
 const { User } = require('../../models/user_model');
@@ -29,7 +30,26 @@ router.route("/register")
         res.cookie('x-access-token',token)
             .status(200).send(getUserProps(doc));
     } catch(error){
-        res.status(400).json({message:'Error',error: error })
+        res.status(400).json({message:'Error',error: error });
+    }
+});
+
+router.route('/signin')
+.post(async(req, res)=>{
+    try {
+        //find user
+       let user = await User.findOne({email: req.body.email});
+       if (!user) return res.status(400).json({message: 'Bad email'});
+       //compare password
+       const compare = await user.comparePassword(req.body.password);
+       if (!compare) return res.status(400).json({message: 'Bad password'});
+       //generate token
+       const token = user.generateToken();
+       //response
+       res.cookie('x-access-token', token)
+           .status(200).send(getUserProps(user));
+    } catch(error) {
+        res.status(400).json({message:'Error',error: error });
     }
 });
 
@@ -45,5 +65,10 @@ const getUserProps = (user) => {
         role: user.role
     }
 };
+
+router.route('/profile')
+.get(checkLoggedIn, async(req, res)=>{
+    res.status(200).send('ok profile');
+});
 
 module.exports = router;
