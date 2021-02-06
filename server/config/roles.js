@@ -8,6 +8,9 @@ let grantsObject = {
             'update:any': ['*'],
             'delete:any': ['*']
         },
+        articles:{
+            'read:any': ['*'],
+        },
         article:{
             'create:any': ['*'],
             'read:any': ['*'],
@@ -18,10 +21,10 @@ let grantsObject = {
     user:{
         profile:{
             'read:own': ['*','!password','!_id','!date'],
-            'update:own': ['*']
+            'update:own': ['*'],
         }
     }
-};
+}
 
 
 const roles = new AccessControl(grantsObject);
